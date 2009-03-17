@@ -2,6 +2,6 @@ h1. EZPZ Tooltip
 
 There are a "ton of tooltip plugins":http://www.google.com/search?q=jquery+tooltip for jQuery out there, but I couldn’t find one that works with the way I think. To me, it’s a simple concept: You hover over a target element, then some content shows up. It should be flexible enough to customize the look and feel without requiring the bloat of any CSS or images. Hover targets should be mapped to their content counterparts by convention. I think I’ve built just that with the EZPZ Tooltip.
 
-Check out "the demo here":http://theezpzway.com/2009/3/16/ezpz-tooltip-demo.
+Check out "the demo here":http://theezpzway.com/2009/3/17/ezpz-tooltip-demo.
 
-Check out "the documentation here":http://theezpzway.com/2009/3/16/jquery-plugin-ezpz-tooltip.
+Check out "the documentation here":http://theezpzway.com/2009/3/17/jquery-plugin-ezpz-tooltip.
