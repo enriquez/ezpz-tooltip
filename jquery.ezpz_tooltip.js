@@ -17,7 +17,7 @@
 				content.css('left', contentInfo['left']);
 				
 				$.fn.ezpz_tooltip.showContent(content);
-			})
+			});
 			
 			if (settings.stayOnContent && this.id != "") {
 				$("#" + this.id + ", #" + getContentId(this.id)).mouseover(function(){
