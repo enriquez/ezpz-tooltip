@@ -16,7 +16,7 @@
 				content.css('top', contentInfo['top']);
 				content.css('left', contentInfo['left']);
 				
-				$.fn.ezpz_tooltip.showContent(content);
+				settings.showContent(content);
 			});
 			
 			if (settings.stayOnContent && this.id != "") {
@@ -29,7 +29,7 @@
 			}
 			else {
 				targetMousedOver.mouseout(function(){
-					content.hide();
+					settings.hideContent(content);
 					settings.afterHide();
 				})
 			}
@@ -86,10 +86,6 @@
 		};
 	};
 	
-	$.fn.ezpz_tooltip.showContent = function(content) {
-		content.show();
-	};
-	
 	$.fn.ezpz_tooltip.positionContent = function(contentInfo, mouseX, mouseY, offset, targetInfo) {
 		contentInfo['top'] = mouseY - offset - contentInfo['height'];
 		contentInfo['left'] = mouseX + offset;
@@ -112,6 +108,12 @@
 		offset: 10,
 		contentId: "",
 		beforeShow: function(content){},
+		showContent: function(content){
+			content.show();
+		},
+		hideContent: function(content){
+			content.hide();
+		},
 		afterHide: function(){}
 	};
 	
