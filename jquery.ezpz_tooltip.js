@@ -8,10 +8,10 @@
       var targetMousedOver = $(this).mouseover(function(){
         settings.beforeShow(content, $(this));
       }).mousemove(function(e){
-        contentInfo = getElementDimensionsAndPosition(content);
-        targetInfo = getElementDimensionsAndPosition($(this));
-        contentInfo = $.fn.ezpz_tooltip.positions[settings.contentPosition](contentInfo, e.pageX, e.pageY, settings.offset, targetInfo);
-        contentInfo = keepInWindow(contentInfo);
+        var contentInfo = getElementDimensionsAndPosition(content);
+        var targetInfo  = getElementDimensionsAndPosition($(this));
+        var contentInfo = $.fn.ezpz_tooltip.positions[settings.contentPosition](contentInfo, e.pageX, e.pageY, settings.offset, targetInfo);
+        var contentInfo = keepInWindow(contentInfo);
 
         content.css('top', contentInfo['top']);
         content.css('left', contentInfo['left']);
