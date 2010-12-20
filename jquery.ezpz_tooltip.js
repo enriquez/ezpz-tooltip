@@ -5,9 +5,9 @@
 
     return this.each(function(){
       var content = $("#" + getContentId(this.id));
-      var targetMousedOver = $(this).mouseover(function(){
+      var targetMousedOver = $(this).click(function(){
         settings.beforeShow(content, $(this));
-      }).mousemove(function(e){
+      }).click(function(e){
         var contentInfo = getElementDimensionsAndPosition(content);
         var targetInfo  = getElementDimensionsAndPosition($(this));
         var contentInfo = $.fn.ezpz_tooltip.positions[settings.contentPosition](contentInfo, e.pageX, e.pageY, settings.offset, targetInfo);
@@ -16,23 +16,13 @@
         content.css('top', contentInfo['top']);
         content.css('left', contentInfo['left']);
 
-        settings.showContent(content);
-      });
-
-      if (settings.stayOnContent && this.id != "") {
-        $("#" + this.id + ", #" + getContentId(this.id)).mouseover(function(){
-          content.css('display', 'block');
-        }).mouseout(function(){
-          content.css('display', 'none');
-          settings.afterHide();
-        });
-      }
-      else {
-        targetMousedOver.mouseout(function(){
+        if (content.is(':visible')) {
           settings.hideContent(content);
           settings.afterHide();
-        })
-      }
+        } else {
+          settings.showContent(content);
+        }
+      })
 
     });
 
