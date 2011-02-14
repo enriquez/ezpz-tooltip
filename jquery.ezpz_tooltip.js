@@ -185,5 +185,19 @@
 
     return contentInfo;
   };
+	
+	$.fn.ezpz_tooltip.positions.belowRightStatic = function(contentInfo, mouseX, mouseY, offset, targetInfo) {
+		contentInfo['top'] = targetInfo['top'] + targetInfo['height'] + offset;
+		contentInfo['left'] = targetInfo['left'] + targetInfo['width'] + offset;
+		
+		return contentInfo;
+	};
+	
+	$.fn.ezpz_tooltip.positions.underTarget = function(contentInfo, mouseX, mouseY, offset, targetInfo) {
+		contentInfo['top'] = targetInfo['top'] + targetInfo['height'] + offset;
+		contentInfo['left'] = targetInfo['left'];
+		
+		return contentInfo;
+	};
 
 })(jQuery);
