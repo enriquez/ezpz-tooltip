@@ -5,11 +5,11 @@
 
     return this.each(function(){
       var content = $("#" + getContentId(this.id));
-      var targetMousedOver = $(this).mouseover(function(){
-        settings.beforeShow(content, $(this));
-      }).mousemove(function(e){
-        var contentInfo = getElementDimensionsAndPosition(content);
-        var targetInfo  = getElementDimensionsAndPosition($(this));
+			var targetMousedOver = $(this);
+			
+			var fPositionContent = function(e) {
+				var contentInfo = getElementDimensionsAndPosition(content);
+        var targetInfo  = getElementDimensionsAndPosition(targetMousedOver);
         var contentInfo = $.fn.ezpz_tooltip.positions[settings.contentPosition](contentInfo, e.pageX, e.pageY, settings.offset, targetInfo);
         var contentInfo = keepInWindow(contentInfo);
 
@@ -17,23 +17,38 @@
         content.css('left', contentInfo['left']);
 
         settings.showContent(content);
-      });
-
-      if (settings.stayOnContent && this.id != "") {
-        $("#" + this.id + ", #" + getContentId(this.id)).mouseover(function(){
-          content.css('display', 'block');
-        }).mouseout(function(){
-          content.css('display', 'none');
+			}
+			var fHideContent = function() {
+					if (targetMousedOver.data("overTrigger") || targetMousedOver.data("overContent")) return;
+					targetMousedOver.data("showing", false);
+					settings.hideContent(content);
           settings.afterHide();
-        });
-      }
-      else {
-        targetMousedOver.mouseout(function(){
-          settings.hideContent(content);
-          settings.afterHide();
-        })
-      }
-
+			}
+			
+			targetMousedOver
+				.mouseenter(function(e){
+					targetMousedOver.data("overTrigger", true)
+					if (targetMousedOver.data("showing")) return; //prevent re-showing a shown popup
+					settings.beforeShow(content, $(this));
+					targetMousedOver.data("showing", true);
+					fPositionContent(e);
+				})
+				.mousemove(fPositionContent)
+				.mouseleave(function() {
+					targetMousedOver.data("overTrigger", false)
+					fHideContent();//window.setTimeout(fHideContent, 150);
+				});
+			
+			if (settings.stayOnContent) {
+				content
+					.mouseenter(function() {
+						targetMousedOver.data("overContent", true)
+					})
+					.mouseleave(function() {
+						targetMousedOver.data("overContent", false)
+						fHideContent();//window.setTimeout(fHideContent, 150);
+					});
+			};
     });
 
     function getContentId(targetId){
