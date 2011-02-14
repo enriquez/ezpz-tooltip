@@ -36,7 +36,7 @@
 				.mousemove(fPositionContent)
 				.mouseleave(function() {
 					targetMousedOver.data("overTrigger", false)
-					fHideContent();//window.setTimeout(fHideContent, 150);
+					window.setTimeout(fHideContent, 0);
 				});
 			
 			if (settings.stayOnContent) {
@@ -46,7 +46,7 @@
 					})
 					.mouseleave(function() {
 						targetMousedOver.data("overContent", false)
-						fHideContent();//window.setTimeout(fHideContent, 150);
+						window.setTimeout(fHideContent, 0);
 					});
 			};
     });
