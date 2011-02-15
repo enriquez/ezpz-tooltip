@@ -6,6 +6,11 @@
     return this.each(function(){
       var content = $("#" + getContentId(this.id));
 			var targetMousedOver = $(this);
+			var state = {
+				overTrigger: false,
+				overContent: false,
+				contentShown: false
+			};
 			
 			var fPositionContent = function(e) {
 				var contentInfo = getElementDimensionsAndPosition(content);
@@ -19,33 +24,33 @@
         settings.showContent(content);
 			}
 			var fHideContent = function() {
-					if (targetMousedOver.data("overTrigger") || targetMousedOver.data("overContent")) return;
-					targetMousedOver.data("showing", false);
+					if (state.overTrigger || state.overContent) return;
+					state.contentShown = false;
 					settings.hideContent(content);
           settings.afterHide();
 			}
 			
 			targetMousedOver
 				.mouseenter(function(e){
-					targetMousedOver.data("overTrigger", true)
-					if (targetMousedOver.data("showing")) return; //prevent re-showing a shown popup
+					state.overTrigger = true;
+					if (state.contentShown) return; //prevent re-showing a shown popup
 					settings.beforeShow(content, $(this));
-					targetMousedOver.data("showing", true);
+					state.contentShown = true;
 					fPositionContent(e);
 				})
 				.mousemove(fPositionContent)
 				.mouseleave(function() {
-					targetMousedOver.data("overTrigger", false)
+					state.overTrigger = false;
 					window.setTimeout(fHideContent, 0);
 				});
 			
 			if (settings.stayOnContent) {
 				content
 					.mouseenter(function() {
-						targetMousedOver.data("overContent", true)
+						state.overContent = true;
 					})
 					.mouseleave(function() {
-						targetMousedOver.data("overContent", false)
+						state.overContent = false;
 						window.setTimeout(fHideContent, 0);
 					});
 			};
