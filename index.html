@@ -16,11 +16,21 @@
 		function ajax_simulate_reply(content) {
 			$(content).text("AJAX content loaded!");
 		};
+		function ajax_load_content_alternate(content) {
+			$(content).empty();
+			window.setTimeout(function() {
+				ajax_simulate_reply_alternate(content)
+			}, 200);
+		}
+		function ajax_simulate_reply_alternate(content) {
+			$(content).text("Alternate AJAX content loaded!");
+		};
 		
 		$(document).ready(function() {
 			$("#example-target-1").ezpz_tooltip({beforeShow:ajax_load_content});
 			$("#example-target-2").ezpz_tooltip({beforeShow:ajax_load_content, stayOnContent:true,contentPosition: 'rightStatic', offset:-40});
-			$("#example-target-3").ezpz_tooltip({beforeShow:ajax_load_content, contentId:'non_convention_content'});
+			$("#example-target-3").ezpz_tooltip({beforeShow:ajax_load_content, contentId:'non_convention_content', stayOnContent:true,contentPosition: 'rightStatic', offset:-40});
+			$("#example-target-5").ezpz_tooltip({beforeShow:ajax_load_content_alternate, contentId:'non_convention_content', stayOnContent:true,contentPosition: 'rightStatic', offset:-40});
 		});
 	</script>
 	<style type="text/css">
@@ -51,6 +61,9 @@
 		</p>
 		<p id="example-target-3" class="tooltip-target">
 			<a href="http://example.com">Tooltip with explicit contentId</a>
+		</p>
+		<p id="example-target-5" class="tooltip-target">
+			<a href="http://example.com">Sharing the same tooltip container via explicit contentId</a>
 		</p>
 	</div>
 	<div class="tooltip-content" id="example-content-1">Tooltip content</div>
