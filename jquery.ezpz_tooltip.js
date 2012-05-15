@@ -5,11 +5,16 @@
 
     return this.each(function(){
       var content = $("#" + getContentId(this.id));
-      var targetMousedOver = $(this).mouseover(function(){
-        settings.beforeShow(content, $(this));
-      }).mousemove(function(e){
-        var contentInfo = getElementDimensionsAndPosition(content);
-        var targetInfo  = getElementDimensionsAndPosition($(this));
+			var targetMousedOver = $(this);
+			var state = {
+				overTrigger: false,
+				overContent: false,
+				contentShown: false
+			};
+			
+			var fPositionContent = function(e) {
+				var contentInfo = getElementDimensionsAndPosition(content);
+        var targetInfo  = getElementDimensionsAndPosition(targetMousedOver);
         var contentInfo = $.fn.ezpz_tooltip.positions[settings.contentPosition](contentInfo, e.pageX, e.pageY, settings.offset, targetInfo);
         var contentInfo = keepInWindow(contentInfo);
 
@@ -17,23 +22,38 @@
         content.css('left', contentInfo['left']);
 
         settings.showContent(content);
-      });
-
-      if (settings.stayOnContent && this.id != "") {
-        $("#" + this.id + ", #" + getContentId(this.id)).mouseover(function(){
-          content.css('display', 'block');
-        }).mouseout(function(){
-          content.css('display', 'none');
+			}
+			var fHideContent = function() {
+					if (state.overTrigger || state.overContent) return;
+					state.contentShown = false;
+					settings.hideContent(content);
           settings.afterHide();
-        });
-      }
-      else {
-        targetMousedOver.mouseout(function(){
-          settings.hideContent(content);
-          settings.afterHide();
-        })
-      }
-
+			}
+			
+			targetMousedOver
+				.mouseenter(function(e){
+					state.overTrigger = true;
+					if (state.contentShown) return; //prevent re-showing a shown popup
+					settings.beforeShow(content, $(this));
+					state.contentShown = true;
+					fPositionContent(e);
+				})
+				.mousemove(fPositionContent)
+				.mouseleave(function() {
+					state.overTrigger = false;
+					window.setTimeout(fHideContent, 0);
+				});
+			
+			if (settings.stayOnContent) {
+				content
+					.mouseenter(function() {
+						state.overContent = true;
+					})
+					.mouseleave(function() {
+						state.overContent = false;
+						window.setTimeout(fHideContent, 0);
+					});
+			};
     });
 
     function getContentId(targetId){
@@ -170,5 +190,19 @@
 
     return contentInfo;
   };
+	
+	$.fn.ezpz_tooltip.positions.belowRightStatic = function(contentInfo, mouseX, mouseY, offset, targetInfo) {
+		contentInfo['top'] = targetInfo['top'] + targetInfo['height'] + offset;
+		contentInfo['left'] = targetInfo['left'] + targetInfo['width'] + offset;
+		
+		return contentInfo;
+	};
+	
+	$.fn.ezpz_tooltip.positions.underTarget = function(contentInfo, mouseX, mouseY, offset, targetInfo) {
+		contentInfo['top'] = targetInfo['top'] + targetInfo['height'] + offset;
+		contentInfo['left'] = targetInfo['left'];
+		
+		return contentInfo;
+	};
 
 })(jQuery);
